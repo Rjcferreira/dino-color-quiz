@@ -1,58 +1,7 @@
-<!doctype html>
-<html lang="pt-PT">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#17152d">
-  <meta name="description" content="Dino Match: encontra os pares de cores e dinossauros.">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="style.css">
-  <title>Dino Match</title>
-</head>
-<body>
-  <main class="app-shell">
-    <header class="topbar">
-      <div class="brand"><span>🦖</span> Dino Match</div>
-      <button id="soundBtn" class="icon-btn" aria-label="Desligar som">🔊</button>
-    </header>
-
-    <section id="startScreen" class="screen active">
-      <div class="hero-card">
-        <div class="hero-emoji">🦕✨</div>
-        <p class="eyebrow">JOGO DE MEMÓRIA</p>
-        <h1>Encontra os<br><em>iguais!</em></h1>
-        <p class="subtitle">Escolhe os dois cubos com a mesma cor ou o mesmo dinossauro.</p>
-        <button id="startBtn" class="primary-btn">Jogar agora <span>→</span></button>
-      </div>
-      <div class="features"><span>🎯 Níveis</span><span>🔊 Sons</span><span>🏆 Recorde</span></div>
-    </section>
-
-    <section id="gameScreen" class="screen">
-      <div class="stats">
-        <div><small>NÍVEL</small><strong id="levelLabel">1</strong></div>
-        <div class="progress-wrap"><div class="progress-track"><div id="progressBar"></div></div><small id="modeLabel">CORES</small></div>
-        <div class="score"><small>PONTOS</small><strong id="scoreLabel">0</strong></div>
-      </div>
-      <div class="challenge"><span id="promptIcon">🎨</span><div><small>DESAFIO</small><h2 id="promptText">Encontra o par igual</h2></div></div>
-      <p class="hint">Toca em dois cubos para os comparar</p>
-      <div id="board" class="board" aria-live="polite"></div>
-      <button id="homeBtn" class="text-btn">↩ Voltar ao início</button>
-    </section>
-
-    <section id="resultScreen" class="screen">
-      <div class="result-card">
-        <div id="resultEmoji" class="result-emoji">🎉</div>
-        <p class="eyebrow">MUITO BEM!</p>
-        <h1>Nível completo!</h1>
-        <p id="resultMessage">Estás a ficar imparável.</p>
-        <div class="result-score"><small>PONTUAÇÃO</small><strong id="resultScore">0</strong></div>
-        <button id="nextBtn" class="primary-btn">Próximo nível <span>→</span></button>
-      </div>
-    </section>
-
-    <footer id="bestLabel">Recorde: 0</footer>
-  </main>
-  <script src="app.js"></script>
-</body>
-</html>
+<!doctype html><html lang="pt-PT"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#17152d"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg"><link rel="stylesheet" href="style.css"><title>Dino Diversão</title></head><body><main class="app-shell">
+<header class="topbar"><button id="backBtn" class="icon-btn hidden">←</button><div class="brand"><span>🦖</span> Dino Diversão</div><button id="soundBtn" class="icon-btn">🔊</button></header>
+<section id="menuScreen" class="screen active"><div class="menu-hero"><div class="hero-emoji">🦕✨</div><p class="eyebrow">ESCOLHE UM JOGO</p><h1>Vamos <em>brincar!</em></h1><p class="subtitle">Três aventuras para aprender e divertir.</p></div><div class="game-menu"><button class="game-card purple" data-game="pairs"><span class="game-icon">🧩</span><span><strong>Jogo dos Pares</strong><small>Cores, números, letras e animais</small></span><b>›</b></button><button class="game-card orange" data-game="math"><span class="game-icon">➕</span><span><strong>Dino Matemática</strong><small>Conta os dinossauros</small></span><b>›</b></button><button class="game-card green" data-game="paint"><span class="game-icon">🎨</span><span><strong>Pintar o Dino</strong><small>Dá vida ao desenho</small></span><b>›</b></button></div><div class="features"><span>🎯 Níveis</span><span>🔊 Sons</span><span>🏆 Recorde</span></div></section>
+<section id="pairsScreen" class="screen"><div class="stats"><div><small>NÍVEL</small><strong id="levelLabel">1</strong></div><div class="progress-wrap"><div class="progress-track"><div id="progressBar"></div></div><small id="modeLabel">CORES</small></div><div class="score"><small>PONTOS</small><strong id="scoreLabel">0</strong></div></div><div class="challenge"><span id="promptIcon">🎨</span><div><small>DESAFIO</small><h2 id="promptText">Encontra todos os pares</h2></div></div><p id="pairsHint" class="hint"></p><div id="board" class="board"></div></section>
+<section id="mathScreen" class="screen"><div class="stats"><div><small>RONDA</small><strong id="mathRound">1</strong></div><div></div><div class="score"><small>PONTOS</small><strong id="mathScore">0</strong></div></div><div class="challenge"><span>🧠</span><div><small>CONTA E SOMA</small><h2>Quantos dinos são?</h2></div></div><div id="equation" class="equation"></div><div id="answers" class="answers"></div><p class="hint">Toca na resposta certa</p></section>
+<section id="paintScreen" class="screen"><div class="challenge paint-title"><span>🎨</span><div><small>ATELIÊ DINO</small><h2>Pinta o teu dinossauro</h2></div></div><div class="paint-canvas"><svg viewBox="0 0 400 300"><path id="sky" class="paint-part" d="M8 8h384v284H8z"/><path id="body" class="paint-part" d="M92 218c-20-80 35-145 110-126 28 7 42 29 58 54l44-4 28 28-48 22c-8 45-59 57-106 45l-20 42h-36l13-53c-19-4-31-4-43-8z"/><circle id="eye" cx="231" cy="127" r="10"/><path id="spots" class="paint-part" d="M135 137c12-18 35-21 47-4-9 17-31 22-47 4zm44 63c9-17 31-20 43-4-8 18-30 21-43 4zm73-25c8-13 26-14 34-2-7 13-24 16-34 2z"/><path d="M110 98 87 61l43 23 6-42 29 38 21-38 11 45" fill="#ffd166" stroke="#3b315d" stroke-width="7"/></svg></div><div id="palette" class="palette"></div><p class="hint">Escolhe uma cor e toca numa zona</p><button id="clearPaint" class="secondary-btn">✨ Novo desenho</button></section>
+<section id="resultScreen" class="screen"><div class="result-card"><div class="result-emoji">🎉</div><p class="eyebrow">MUITO BEM!</p><h1>Nível completo!</h1><p id="resultMessage"></p><div class="result-score"><small>PONTUAÇÃO</small><strong id="resultScore">0</strong></div><button id="nextBtn" class="primary-btn">Próximo nível <span>→</span></button></div></section><footer id="bestLabel">Recorde: 0</footer></main><script src="app.js"></script></body></html>

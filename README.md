@@ -1,6 +1,6 @@
-# Dino Match
+# Dino Diversão
 
-Jogo de memória instalável no Android como PWA. Não usa bibliotecas, imagens remotas nem ficheiros de áudio: os sons são gerados no dispositivo.
+Aplicação infantil instalável no Android, com pares progressivos, matemática e desenho para pintar. Não usa bibliotecas, imagens remotas nem ficheiros de áudio.
 
 ## Jogar e instalar
 

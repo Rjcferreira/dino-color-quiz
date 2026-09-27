@@ -1,47 +1,12 @@
-const $=s=>document.querySelector(s);
-const screens={start:$('#startScreen'),game:$('#gameScreen'),result:$('#resultScreen')};
-const colors=['#ff6688','#ffc857','#55d6be','#6d8cff','#b978ff','#ff914d'];
-const dinos=['🦖','🦕','🐊','🥚','🌋','🦴','🦎','🐲'];
-let level=1,score=0,best=Number(localStorage.dinoBest||0),sound=true,selected=[],locked=false,audioCtx;
-
-function show(name){Object.values(screens).forEach(x=>x.classList.remove('active'));screens[name].classList.add('active');$('#bestLabel').textContent=`Recorde: ${best}`}
-function tone(freq,duration=.12,type='sine'){if(!sound)return;audioCtx??=new(window.AudioContext||window.webkitAudioContext)();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=freq;o.type=type;g.gain.setValueAtTime(.07,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+duration)}
-function saveBest(){if(score>best){best=score;localStorage.dinoBest=best}}
-function start(){level=1;score=0;build();show('game');tone(520)}
-
-function build(){
-  selected=[];locked=false;
-  const dinoMode=level>=4;
-  const tileCount=level<2?4:level<5?6:8;
-  const source=dinoMode?dinos:colors;
-  const pair=source[(level*2)%source.length];
-  const items=[pair,pair];
-  for(const item of source){if(items.length>=tileCount)break;if(item!==pair)items.push(item)}
-  while(items.length<tileCount)items.push(source[items.length%source.length]);
-  items.sort(()=>Math.random()-.5);
-  $('#levelLabel').textContent=level;$('#scoreLabel').textContent=score;
-  $('#modeLabel').textContent=dinoMode?'DINOS':'CORES';$('#promptIcon').textContent=dinoMode?'🦖':'🎨';
-  $('#promptText').textContent=dinoMode?'Encontra os dinossauros iguais':'Encontra as cores iguais';
-  $('#progressBar').style.width=`${Math.min(100,level*10)}%`;
-  const board=$('#board');board.innerHTML='';
-  items.forEach(item=>{const b=document.createElement('button');b.className='cube';b.dataset.key=item;b.setAttribute('aria-label',dinoMode?`Dinossauro ${item}`:`Cubo de cor ${item}`);if(dinoMode)b.textContent=item;else b.style.background=item;b.onclick=()=>pick(b);board.appendChild(b)});
-}
-
-function pick(btn){
-  if(locked||selected.includes(btn))return;selected.push(btn);btn.classList.add('selected');tone(300,.06);
-  if(selected.length<2)return;locked=true;const[a,b]=selected;
-  if(a.dataset.key===b.dataset.key){
-    a.classList.add('good');b.classList.add('good');score+=100+level*15;saveBest();tone(740,.18);
-    setTimeout(()=>{$('#resultScore').textContent=score;$('#resultMessage').textContent=level%3===0?'Excelente memória, campeão!':'Muito bem! O próximo é ainda mais divertido.';$('#resultEmoji').textContent=level>=4?'🦖🎉':'🌟🎉';show('result')},500);
-  }else{
-    a.classList.add('bad');b.classList.add('bad');score=Math.max(0,score-10);tone(140,.2,'sawtooth');
-    setTimeout(()=>{a.classList.remove('selected','bad');b.classList.remove('selected','bad');selected=[];locked=false;$('#scoreLabel').textContent=score},520);
-  }
-}
-
-$('#startBtn').onclick=start;
-$('#nextBtn').onclick=()=>{level++;build();show('game');tone(540)};
-$('#homeBtn').onclick=()=>{saveBest();show('start')};
-$('#soundBtn').onclick=()=>{sound=!sound;$('#soundBtn').textContent=sound?'🔊':'🔇';$('#soundBtn').setAttribute('aria-label',sound?'Desligar som':'Ligar som')};
-show('start');
-if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const screens=$$('.screen'),colors=['#ff6688','#ffc857','#55d6be','#6d8cff','#b978ff','#ff914d'],sets=[{name:'CORES',icon:'🎨',items:colors,color:true},{name:'NÚMEROS',icon:'🔢',items:['1','2','3','4','5','6','7','8']},{name:'LETRAS',icon:'🔤',items:['A','B','C','D','E','F','G','H']},{name:'ANIMAIS',icon:'🐾',items:['🦁','🐼','🐸','🐵','🐯','🐨','🦊','🐰']},{name:'DINOS',icon:'🦖',items:['🦖','🦕','🐊','🥚','🌋','🦴','🦎','🐲']}];
+let level=1,score=0,best=Number(localStorage.dinoBest||0),sound=true,selected=[],locked=false,matched=0,audioCtx,paintColor='#ff6688',mathRound=1,mathScore=0;
+function show(id){screens.forEach(s=>s.classList.remove('active'));$('#'+id).classList.add('active');$('#backBtn').classList.toggle('hidden',id==='menuScreen');$('#bestLabel').textContent=`Recorde: ${best}`}
+function tone(f,d=.12,type='sine'){if(!sound)return;audioCtx??=new(window.AudioContext||window.webkitAudioContext)();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=f;o.type=type;g.gain.setValueAtTime(.06,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+d);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d)}
+function shuffle(a){return a.sort(()=>Math.random()-.5)}function saveBest(){if(score>best){best=score;localStorage.dinoBest=best}}
+function openGame(g){tone(520);if(g==='pairs'){level=1;score=0;buildPairs();show('pairsScreen')}if(g==='math'){mathRound=1;mathScore=0;buildMath();show('mathScreen')}if(g==='paint'){buildPalette();show('paintScreen')}}
+function buildPairs(){selected=[];locked=false;matched=0;const set=sets[Math.min(sets.length-1,Math.floor((level-1)/2))],pairs=Math.min(2+Math.floor((level-1)/2),4),memory=level>=5,chosen=shuffle([...set.items]).slice(0,pairs),items=shuffle([...chosen,...chosen]);$('#levelLabel').textContent=level;$('#scoreLabel').textContent=score;$('#modeLabel').textContent=set.name+(memory?' · MEMÓRIA':'');$('#promptIcon').textContent=set.icon;$('#promptText').textContent=`Encontra os ${pairs} pares`;$('#pairsHint').textContent=memory?'Memoriza! As cartas vão esconder-se…':'Todos os pares contam neste nível';$('#progressBar').style.width=`${Math.min(100,level*10)}%`;const board=$('#board');board.innerHTML='';board.className='board '+(items.length>=8?'compact':'');items.forEach(item=>{const b=document.createElement('button');b.className='cube revealed';b.dataset.key=item;b.dataset.value=item;if(set.color)b.style.setProperty('--face',item);else b.textContent=item;b.onclick=()=>pickPair(b);board.appendChild(b)});if(memory){locked=true;setTimeout(()=>{$$('.cube').forEach(b=>{b.classList.remove('revealed');b.textContent=''});locked=false;$('#pairsHint').textContent='Agora encontra os pares escondidos!'},1800)}}
+function pickPair(btn){if(locked||btn.classList.contains('matched')||selected.includes(btn))return;btn.classList.add('revealed','selected');if(!btn.style.getPropertyValue('--face'))btn.textContent=btn.dataset.value;selected.push(btn);tone(300,.06);if(selected.length<2)return;locked=true;const[a,b]=selected;if(a.dataset.key===b.dataset.key){a.classList.remove('selected');b.classList.remove('selected');a.classList.add('matched');b.classList.add('matched');matched+=2;score+=100+level*10;$('#scoreLabel').textContent=score;tone(740,.18);selected=[];locked=false;if(matched===$$('.cube').length){saveBest();setTimeout(()=>{$('#resultScore').textContent=score;$('#resultMessage').textContent=`Encontraste todos os pares do nível ${level}!`;show('resultScreen')},450)}}else{a.classList.add('bad');b.classList.add('bad');score=Math.max(0,score-10);tone(140,.2,'sawtooth');setTimeout(()=>{a.classList.remove('bad','selected');b.classList.remove('bad','selected');if(level>=5){a.classList.remove('revealed');b.classList.remove('revealed');a.textContent='';b.textContent=''}selected=[];locked=false;$('#scoreLabel').textContent=score},600)}}
+function buildMath(){const a=1+Math.floor(Math.random()*Math.min(5,mathRound+2)),b=1+Math.floor(Math.random()*Math.min(5,mathRound+2)),right=a+b;$('#mathRound').textContent=mathRound;$('#mathScore').textContent=mathScore;$('#equation').innerHTML=`<div>${'🦕'.repeat(a)}</div><b>+</b><div>${'🦖'.repeat(b)}</div><b>= ?</b>`;const wrong=shuffle([...new Set([Math.max(1,right-1),right+1,right+2])]).slice(0,2),choices=shuffle([right,...wrong]);const box=$('#answers');box.innerHTML='';choices.forEach(n=>{const x=document.createElement('button');x.textContent=n;x.onclick=()=>{if(n===right){mathScore+=50;mathRound++;tone(760,.18);x.classList.add('correct');setTimeout(buildMath,500)}else{tone(140,.2,'sawtooth');x.classList.add('wrong');setTimeout(()=>x.classList.remove('wrong'),400)}};box.appendChild(x)})}
+function buildPalette(){const p=$('#palette');p.innerHTML='';colors.concat(['#9b5de5','#00bbf9','#fff']).forEach(c=>{const b=document.createElement('button');b.style.background=c;b.onclick=()=>{paintColor=c;$$('#palette button').forEach(x=>x.classList.remove('active'));b.classList.add('active');tone(420,.05)};p.appendChild(b)});p.firstChild.classList.add('active')}
+$$('.game-card').forEach(b=>b.onclick=()=>openGame(b.dataset.game));$('#nextBtn').onclick=()=>{level++;buildPairs();show('pairsScreen')};$('#backBtn').onclick=()=>{saveBest();show('menuScreen')};$('#soundBtn').onclick=()=>{sound=!sound;$('#soundBtn').textContent=sound?'🔊':'🔇'};$$('.paint-part').forEach(p=>p.onclick=()=>{p.style.fill=paintColor;tone(520,.06)});$('#clearPaint').onclick=()=>{$('#sky').style.fill='#d9f2ff';$('#body').style.fill='#7ed957';$('#spots').style.fill='#ffcf56'};show('menuScreen');if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
