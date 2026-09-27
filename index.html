@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#17152d">
+  <meta name="description" content="Dino Match: encontra os pares de cores e dinossauros.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <title>Dino Match</title>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span>🦖</span> Dino Match</div>
+      <button id="soundBtn" class="icon-btn" aria-label="Desligar som">🔊</button>
+    </header>
+
+    <section id="startScreen" class="screen active">
+      <div class="hero-card">
+        <div class="hero-emoji">🦕✨</div>
+        <p class="eyebrow">JOGO DE MEMÓRIA</p>
+        <h1>Encontra os<br><em>iguais!</em></h1>
+        <p class="subtitle">Escolhe os dois cubos com a mesma cor ou o mesmo dinossauro.</p>
+        <button id="startBtn" class="primary-btn">Jogar agora <span>→</span></button>
+      </div>
+      <div class="features"><span>🎯 Níveis</span><span>🔊 Sons</span><span>🏆 Recorde</span></div>
+    </section>
+
+    <section id="gameScreen" class="screen">
+      <div class="stats">
+        <div><small>NÍVEL</small><strong id="levelLabel">1</strong></div>
+        <div class="progress-wrap"><div class="progress-track"><div id="progressBar"></div></div><small id="modeLabel">CORES</small></div>
+        <div class="score"><small>PONTOS</small><strong id="scoreLabel">0</strong></div>
+      </div>
+      <div class="challenge"><span id="promptIcon">🎨</span><div><small>DESAFIO</small><h2 id="promptText">Encontra o par igual</h2></div></div>
+      <p class="hint">Toca em dois cubos para os comparar</p>
+      <div id="board" class="board" aria-live="polite"></div>
+      <button id="homeBtn" class="text-btn">↩ Voltar ao início</button>
+    </section>
+
+    <section id="resultScreen" class="screen">
+      <div class="result-card">
+        <div id="resultEmoji" class="result-emoji">🎉</div>
+        <p class="eyebrow">MUITO BEM!</p>
+        <h1>Nível completo!</h1>
+        <p id="resultMessage">Estás a ficar imparável.</p>
+        <div class="result-score"><small>PONTUAÇÃO</small><strong id="resultScore">0</strong></div>
+        <button id="nextBtn" class="primary-btn">Próximo nível <span>→</span></button>
+      </div>
+    </section>
+
+    <footer id="bestLabel">Recorde: 0</footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
