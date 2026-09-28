@@ -1,6 +1,6 @@
 # Dino Diversão
 
-Aplicação infantil instalável no Android, com pares progressivos, matemática e desenho para pintar. Não usa bibliotecas, imagens remotas nem ficheiros de áudio.
+Aplicação educativa infantil instalável no Android para crianças a partir dos 5 anos. Inclui uma aventura guiada com letras, sons, contagem, números, cores, formas, comparação e sequências, além de pares progressivos, matemática e desenho para pintar. As instruções são faladas pelo dispositivo e o progresso fica guardado localmente.
 
 ## Jogar e instalar
 
