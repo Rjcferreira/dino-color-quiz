@@ -1,6 +1,6 @@
 # Dino Diversão
 
-Aplicação educativa infantil instalável no Android para crianças a partir dos 5 anos. Inclui uma aventura guiada com letras, sons, contagem, números, cores, formas, comparação e sequências; aventuras próprias de soma e subtração; 18 puzzles ilustrados com dificuldade progressiva; pares; e um atelier com 15 desenhos para pintar — dinossauros, carros, camiões, motas e animais. As instruções são faladas pelo dispositivo e o progresso fica guardado localmente.
+Aplicação infantil instalável no Android para crianças a partir dos 5 anos. Inclui 18 puzzles de dinossauros, um atelier com 15 desenhos para pintar e o Mundo dos Blocos — uma aventura segura de exploração, recolha de estrelas e construção, sem chat nem contas online. O progresso dos puzzles, a pintura em curso e o mundo construído ficam guardados no dispositivo.
 
 ## Jogar e instalar
 
