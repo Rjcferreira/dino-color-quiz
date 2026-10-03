@@ -1,4 +1,4 @@
-import * as THREE from './assets/three.module.js';
+let THREE;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],colors=['#ff6688','#ffc857','#55d6be','#6d8cff','#b978ff','#ff914d'],praises=['Fantástico!','Muito bem!','Boa!','És incrível!','Conseguiste!'];
 const defaultState={puzzle:{level:0,pieces:[],completed:[]},paint:{row:null,col:0,image:'',color:'#ff6688'},blocks:{x:1,y:8,collected:[],placed:[],selected:'brick'}};
 let state;try{state=Object.assign({},defaultState,JSON.parse(localStorage.dinoFunStateV11||'{}'));state.puzzle=Object.assign({},defaultState.puzzle,state.puzzle);state.paint=Object.assign({},defaultState.paint,state.paint);state.blocks=Object.assign({},defaultState.blocks,state.blocks)}catch(e){state=structuredClone(defaultState)}
@@ -10,7 +10,7 @@ function tone(f,d=.12,type='sine'){if(!sound)return;audioCtx??=new(window.AudioC
 function celebrate(big=false){$('#praise').textContent=praises[Math.floor(Math.random()*praises.length)];const box=$('#celebration');box.className='celebration show'+(big?' big':'');tone(660,.1);setTimeout(()=>tone(880,.18),100);setTimeout(()=>box.className='celebration',900)}
 function shuffle(a){return a.sort(()=>Math.random()-.5)}
 function updateMenu(){const done=state.puzzle.completed.length;$('#puzzleMenuProgress').textContent=done?`${done} de 18 completos · continuar no ${state.puzzle.level+1}`:'18 imagens para montar';$('#paintMenuProgress').textContent=state.paint.row===null?'15 desenhos em 5 categorias':`Continuar: ${paintCategories[state.paint.row].drawings[state.paint.col]}`;$('#blockMenuProgress').textContent=state.blocks.collected.length||state.blocks.placed.length?`${state.blocks.collected.length} estrelas · ${state.blocks.placed.length} blocos`:'Explora, recolhe e constrói'}
-function openGame(game){tone(520);if(game==='puzzle'){puzzleLevel=state.puzzle.level;buildPuzzle(true);show('puzzleScreen')}if(game==='paint'){if(state.paint.row!==null)startPainting(state.paint.row,state.paint.col,true);else showPaintChoice();show('paintScreen')}if(game==='blocks'){show('blocksScreen');initWorld3D();syncWorld3D()}}
+function openGame(game){tone(520);if(game==='puzzle'){puzzleLevel=state.puzzle.level;buildPuzzle(true);show('puzzleScreen')}if(game==='paint'){if(state.paint.row!==null)startPainting(state.paint.row,state.paint.col,true);else showPaintChoice();show('paintScreen')}if(game==='blocks'){show('blocksScreen');$('#blockTip').textContent='A preparar o mundo 3D…';loadWorld3D().then(()=>{syncWorld3D();$('#blockTip').textContent='Explora o mundo, apanha estrelas e constrói!'}).catch(()=>{$('#blockTip').textContent='Não foi possível abrir o 3D. Atualiza a app e tenta novamente.'})}}
 
 const puzzleData=[
  ...['Bronto no prado','Tricerátops das flores','Estego do lago','T-Rex da selva','Pterodáctilo dos vulcões','Anquilo do jardim'].map((name,index)=>({name,image:'assets/dino-puzzles.jpg',cols:3,rows:2,index})),
@@ -38,6 +38,7 @@ function canvasPaint(e){const c=$('#colorCanvas'),r=c.getBoundingClientRect(),x=
 function surprisePaint(){const palette=colors.concat(['#9b5de5','#00bbf9','#8dd35f']);for(let i=0;i<18;i++)floodPaint(30+Math.floor(Math.random()*340),30+Math.floor(Math.random()*340),palette[i%palette.length]);savePaint();celebrate()}
 
 const worldStars=[[2,7],[4,8],[7,7],[8,5],[6,3],[3,3],[1,1],[8,1]];
+async function loadWorld3D(){if(!THREE)THREE=await import('./assets/three.module.js');initWorld3D()}
 let world3D,worldScene,worldCamera,worldRenderer,player3D,starMeshes=[],placedGroup,worldClock;
 function mat(color,extra={}){return new THREE.MeshStandardMaterial({color,roughness:.72,metalness:.04,...extra})}
 function mesh(geometry,material,x=0,y=0,z=0){const m=new THREE.Mesh(geometry,material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;return m}
