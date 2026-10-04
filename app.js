@@ -2,7 +2,7 @@ let THREE;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],colors=['#ff6688','#ffc857','#55d6be','#6d8cff','#b978ff','#ff914d'],praises=['Fantástico!','Muito bem!','Boa!','És incrível!','Conseguiste!'];
 const defaultState={puzzle:{level:0,pieces:[],completed:[]},paint:{row:null,col:0,image:'',color:'#ff6688'},blocks:{mapVersion:3,inventoryVersion:2,x:500,y:505,dir:{x:0,y:-1},collected:[],placed:[],selected:'brick',grass:100,brick:100,water:100,flower:100,food:100,fed:[],animals:[],adopted:null}};
 let state;try{const saved=JSON.parse(localStorage.dinoFunStateV11||'{}');state=structuredClone(defaultState);state.puzzle=Object.assign(state.puzzle,saved.puzzle||{});state.paint=Object.assign(state.paint,saved.paint||{});state.blocks=Object.assign(state.blocks,saved.blocks||{});if(state.blocks.mapVersion!==3)state.blocks=structuredClone(defaultState.blocks);if(saved.blocks?.inventoryVersion!==2){Object.assign(state.blocks,{inventoryVersion:2,grass:100,brick:100,water:100,flower:100,food:100})}}catch(e){state=structuredClone(defaultState)}
-const APP_VERSION='1.23';
+const APP_VERSION='1.24';
 let sound=true,audioCtx,puzzleLevel=state.puzzle.level,puzzlePieces=[],puzzleSelected=null,puzzleLocked=false,paintColor=state.paint.color,paintCategory=null,paintDrawing=0,paintImage=null,swRegistration,updateFound=false,manualUpdate=false,reloading=false,updateSetupPromise;
 const screens=$$('.screen');
 function save(){localStorage.dinoFunStateV11=JSON.stringify(state);updateMenu()}
