@@ -1,6 +1,6 @@
 # Dino Diversão
 
-Aplicação infantil instalável no Android para crianças a partir dos 5 anos. Inclui 18 puzzles de dinossauros, um atelier com 15 desenhos para pintar e o Mundo dos Blocos 3D — uma aventura em ecrã completo num mapa 1000×1000, com personagem animada, câmara, florestas, lagos, casas, montanhas, recolha de estrelas e ferramentas para construir e remover blocos, sem chat nem contas online. O progresso dos puzzles, a pintura em curso e o mundo construído ficam guardados no dispositivo.
+Aplicação infantil instalável no Android para crianças a partir dos 5 anos. Inclui 18 puzzles de dinossauros, um atelier com 15 desenhos para pintar e o Mundo dos Blocos 3D — uma aventura em ecrã completo num mapa 1000×1000, com personagem animada, câmara, florestas, lagos, casas, montanhas, recolha de estrelas e ferramentas para empilhar e remover blocos. O reinício do mundo pede confirmação para evitar perdas acidentais. Não existem chat nem contas online, e todo o progresso fica guardado no dispositivo.
 
 ## Jogar e instalar
 
