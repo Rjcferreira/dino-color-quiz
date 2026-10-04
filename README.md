@@ -2,6 +2,8 @@
 
 Aplicação infantil instalável no Android para crianças a partir dos 5 anos. Inclui 18 puzzles de dinossauros, um atelier com 15 desenhos para pintar e o Mundo dos Blocos 3D — uma aventura em ecrã completo num mapa 1000×1000, com movimento fluido, personagem animada e 12 espécies de animais. A criança pode adotar um companheiro, libertá-lo com confirmação e escolher outro. O mapa tem 100 estrelas; cada estrela oferece 100 unidades de relva, tijolo, água, flor e comida. Cada mundo também começa com 100 unidades de cada objeto. Pedras, tufos de relva, flores, água e comida aparecem continuamente em posições aleatórias, podem ser recolhidos e reaparecem noutro local. As necessidades do companheiro só avançam durante tempo de jogo ativo. O reinício pede confirmação, não existem chat nem contas online, e todo o progresso fica guardado no dispositivo.
 
+A PWA verifica atualizações ao abrir, ao regressar ao primeiro plano, de 15 em 15 minutos e através do botão manual. A navegação usa a versão online quando disponível e recorre ao cache apenas sem ligação.
+
 ## Jogar e instalar
 
 Abra o endereço do GitHub Pages no Chrome do Android e escolha **Adicionar ao ecrã inicial** ou **Instalar aplicação**.
